@@ -36,8 +36,10 @@ public class InfoPanel extends JPanel implements ActionListener
 		
 		incLife.addActionListener(this);
 		decLife.addActionListener(this);
+		helpButton.addActionListener(this);
 		incLife.setActionCommand("INC");
 		decLife.setActionCommand("DEC");
+		helpButton.setActionCommand("HELP");
 		incLife.setToolTipText("Kezdeti életek számának növelése");
 		decLife.setToolTipText("Kezdeti életek számának csökkentése");
 		
@@ -109,6 +111,9 @@ public class InfoPanel extends JPanel implements ActionListener
 	@Override
 	public void actionPerformed(ActionEvent event)
 	{
+		if (!changable)
+			return;
+		
 		if (event.getActionCommand().equals("INC"))
 		{
 			if (GameSettings.starterLifeCount < 20)
@@ -118,6 +123,11 @@ public class InfoPanel extends JPanel implements ActionListener
 		{
 			if (GameSettings.starterLifeCount > 1)
 				--GameSettings.starterLifeCount;
+		}
+		else if (event.getActionCommand().equals("HELP"))
+		{
+			@SuppressWarnings("unused")
+			HelpWindow helper = new HelpWindow();
 		}
 		else 
 			System.out.println("No action command: "+event.getActionCommand());
