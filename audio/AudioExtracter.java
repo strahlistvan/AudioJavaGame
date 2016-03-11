@@ -12,7 +12,6 @@ import org.jaudiotagger.tag.images.Artwork;
 
 public class AudioExtracter 
 {
-	
 	/** Extract information from an audio file.
 	 *  @param String fileName - path and name of the audio file.
      *  @return Music object, with the properties.
@@ -37,7 +36,6 @@ public class AudioExtracter
 			Music music = new Music(artist, title, file, album, length, year, samples);
 			music.setImage(AudioExtracter.getCoverImage(fileName));
 			return music;
-			
 		}
 		catch(FileNotFoundException ex)
 		{
@@ -75,8 +73,7 @@ public class AudioExtracter
 		}
 		return artist;
 	}
-	
-	
+		
 	/** Give the cover image of the given audio file from metadata, if exists.
 	 *  @param String fileName - path and name of the audio file.
      *  @return BufferedImage - the cover image from metadata.
@@ -118,6 +115,5 @@ public class AudioExtracter
 	       graphics.drawImage(image, 0, 0, width, height, null);
 	       graphics.dispose();
 	       return resizedImage;
-	    }
-	
+	    }	
 }
