@@ -8,9 +8,10 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
-
 
 import java.io.IOException;
 
@@ -22,7 +23,7 @@ import main.GameSettings;
 import main.Question;
 
 @SuppressWarnings("serial")
-public class GameWindow extends JFrame implements ActionListener
+public class GameWindow extends JFrame implements ActionListener, MouseListener
 {
 	private static GameWindow instance;
 	
@@ -35,6 +36,8 @@ public class GameWindow extends JFrame implements ActionListener
 	private String altFile = "disc.jpg";
 	private BufferedImage coverImage = null;
 	private JLabel picLabel = new JLabel();
+	
+	private boolean multiClicked = false;
 	
 	public GameWindow() 
 	{
@@ -105,6 +108,7 @@ public class GameWindow extends JFrame implements ActionListener
 		{
 			buttons[i] = new JButton();
 			buttons[i].addActionListener(this);
+			buttons[i].addMouseListener(this);
 		}
 		renderElements(width, height);
 		
@@ -207,6 +211,9 @@ public class GameWindow extends JFrame implements ActionListener
 	@Override
 	public void actionPerformed(ActionEvent event) 
 	{
+		if (multiClicked)
+			return;
+		
 		try 
 		{
 			//New timer: Show new Question after answer, with 2 sec delay
@@ -257,11 +264,59 @@ public class GameWindow extends JFrame implements ActionListener
 			//GENERAL:
 			musicThread.stop(); //I know it's deprected... but currently works...
 			timer.start();  //Start timer = Show new question, after 2 seconds
+			
+		//	Thread.sleep(1000);
 						
 		}
 		catch (Exception ex) 
 		{
 			ex.printStackTrace();
 		}
+	}
+
+	@Override
+	public void mouseClicked(MouseEvent e) 
+	{
+	    if (e.getClickCount() < 2) 
+	    {
+	        System.out.println("double click");
+	        multiClicked = false;
+	    } 
+	    else 
+	    {
+	        multiClicked = true;
+	        try 
+	        {
+				Thread.sleep(500);
+			} catch (InterruptedException e1) 
+	        {
+				e1.printStackTrace();
+			}
+	    }
+		
+	}
+
+	@Override
+	public void mouseEntered(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mouseExited(MouseEvent e) {
+		// TODO Auto-generated method stub
+		multiClicked = false;
+	}
+
+	@Override
+	public void mousePressed(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mouseReleased(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
 	}
 }
