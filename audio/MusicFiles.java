@@ -82,6 +82,10 @@ public class MusicFiles
 		return allMusicObjects;
 	}
 	
+	/** Return the list of the artist who play soung in the given folder's music files
+	 *  @param String dirName - Path of the audio files
+	 *  @return ArrayList<String> list of the artists
+	 **/
 	public static ArrayList<String> getallArtists(String dirName)
 	{
 		ArrayList<String> allArtists = new ArrayList<String>();
@@ -99,5 +103,28 @@ public class MusicFiles
 				allArtists.add(artist);
 		}
 		return allArtists;
+	}
+	
+	/** Return the list of the albums of the music files
+	 *  @param String dirName - Path of the audio files
+	 *  @return ArrayList<String> list of the albums
+	 **/
+	public static ArrayList<String> getAllAlbum(String dirName)
+	{
+		ArrayList<String> allAlbums = new ArrayList<String>();
+		getallMusicObjects(dirName);
+		for (Music music: allMusicObjects)
+		{
+			String album = music.getAlbum();
+			boolean inArray = false;
+			for (int i=0; i<allAlbums.size(); ++i)
+			{
+				if (allAlbums.get(i).toLowerCase().equals(album.toLowerCase()))
+					inArray = true;
+			}
+			if (!inArray && !album.matches("\\s*"))
+				allAlbums.add(album);
+		}
+		return allAlbums;
 	}
 }

@@ -1,0 +1,3 @@
+Manifest-Version: 1.0
+Class-Path: .:jaudiotagger-2.2.5.jar
+Main-Class: AudioMain

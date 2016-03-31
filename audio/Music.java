@@ -9,7 +9,7 @@ import javazoom.jl.player.advanced.AdvancedPlayer;
 public class Music 
 {
 	private String artist, album, title;
-	private int year, length;
+	private Integer year, length;
 	private long framesCount;
 	private File audioFile;
 	private BufferedImage image;
@@ -123,7 +123,7 @@ public class Music
 		this.title = title;
 	}
 
-	public int getYear() {
+	public Integer getYear() {
 		return year;
 	}
 
@@ -131,7 +131,7 @@ public class Music
 		this.year = year;
 	}
 
-	public int getLength() {
+	public Integer getLength() {
 		return length;
 	}
 
