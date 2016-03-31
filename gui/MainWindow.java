@@ -1,6 +1,7 @@
 package gui;
 
 import java.io.*;
+import java.net.URL;
 import java.awt.Color;
 import java.awt.Container;
 import java.awt.Cursor;
@@ -28,6 +29,7 @@ public class MainWindow extends JFrame implements ActionListener
 	private JTextField chooseFilePathTxt = new JTextField(new File(".").getAbsolutePath());
 	private JButton playGameButton = new JButton("Kezdõdjön a játék!");
 	private JButton readMusicButton = new JButton("Választott könyvtár figyelése");
+	private String imgFilePath = "http://progmatinfo.netii.net/disc.jpg";
 	private BufferedImage myPicture;
 	private JLabel pleaseWaitLabel = new JLabel("Kérem várjon...");
 	
@@ -64,6 +66,8 @@ public class MainWindow extends JFrame implements ActionListener
 
 		chooseFileButton.setBounds(width / 10, 2 * height / 3 + height / 10, width / 4, height / 15);
 		chooseFilePathTxt.setBounds(width / 10 + width / 4, 2 * height / 3 + height / 10, width / 4, height / 15);
+		chooseFilePathTxt.setEditable(false);
+		
 		readMusicButton.setBounds(width / 10 + width / 2, 2 * height / 3 + height / 10, width / 3, height / 15);
 		playGameButton.setBounds(width / 3, height / 2, width / 3, height / 15);
 
@@ -80,16 +84,19 @@ public class MainWindow extends JFrame implements ActionListener
 		chooseFileButton.addActionListener(this);
 		readMusicButton.addActionListener(this);
 		playGameButton.addActionListener(this);
-
-		// add image to the top
-		String imgFileName = "disc.jpg";
-		try {
-			myPicture = ImageIO.read(new File(imgFileName));
+		
+		try 
+		{
+			// add image to the top
+			myPicture = ImageIO.read(new URL(imgFilePath));
+		//	URL url = this.getClass().getResource("disc.jpg");
 			JLabel picLabel = new JLabel((Icon) new ImageIcon(myPicture));
 			picLabel.setBounds(width / 3, height / 10, height / 3, height / 3);
 			cont.add(picLabel);
-		} catch (IOException e) {
-			System.out.println("Can not find file: " + imgFileName);
+		} 
+		catch (IOException e) 
+		{
+			System.out.println("Can not find URL location: " + imgFilePath);
 			e.printStackTrace();
 		}
 
@@ -102,7 +109,6 @@ public class MainWindow extends JFrame implements ActionListener
 		cont.add(readMusicButton);
 		cont.add(playGameButton);
 		cont.add(pleaseWaitLabel);
-
 	}
 
 	public static MainWindow getInstance() {
@@ -118,7 +124,8 @@ public class MainWindow extends JFrame implements ActionListener
 	}
 
 	@Override
-	public void actionPerformed(ActionEvent event) {
+	public void actionPerformed(ActionEvent event) 
+	{
 		if (event.getActionCommand().equals("choose file")) 
 		{
 			JFileChooser chooser = new JFileChooser();
@@ -130,7 +137,7 @@ public class MainWindow extends JFrame implements ActionListener
 			int returnVal = chooser.showOpenDialog(getParent());
 			if (returnVal == JFileChooser.APPROVE_OPTION) 
 			{
-				GameSettings.folderName = chooser.getCurrentDirectory().toString() + "\\" + chooser.getSelectedFile().getName();
+				GameSettings.folderName = chooser.getCurrentDirectory().toString() + "/" + chooser.getSelectedFile().getName();
 				chooseFilePathTxt.setText(GameSettings.folderName);
 				System.out.println("You choose to open this folder: " + GameSettings.folderName);
 			} 
@@ -150,6 +157,7 @@ public class MainWindow extends JFrame implements ActionListener
 					//read all data from selected folder
 					GameSettings.audioFiles = MusicFiles.getallMusicObjects(GameSettings.folderName);
 					GameSettings.artists = MusicFiles.getallArtists(GameSettings.folderName);
+					GameSettings.albums = MusicFiles.getAllAlbum(GameSettings.folderName);
 					System.out.println(GameSettings.artists);
 					
 					JOptionPane.showMessageDialog(null, "Elkészült: " + GameSettings.audioFiles.size() + " audiofile beolvasva.",

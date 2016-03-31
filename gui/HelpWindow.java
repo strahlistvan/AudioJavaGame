@@ -1,9 +1,10 @@
 package gui;
 
 import java.awt.Container;
-import java.io.BufferedReader;
-import java.io.FileReader;
 import java.io.IOException;
+import java.net.URL;
+import java.util.Scanner;
+
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
@@ -16,7 +17,7 @@ public class HelpWindow extends JFrame implements HyperlinkListener
 {
 	private int width = 500, height = 500;
 	private String title = "AudioJavaGame súgója";
-	private String helpHTML = "helpme.html";
+	private String helpURL = "http://progmatinfo.netii.net/AudioJavaGame-helpme.html";
 	private JTextPane helpText = new JTextPane();			//To contain HTML text
 	private JScrollPane scrollPane = new JScrollPane(helpText);	//Scrollable helpText
 	
@@ -32,12 +33,12 @@ public class HelpWindow extends JFrame implements HyperlinkListener
 		
 		try 
 		{
-			String text = readTextFromFile(helpHTML);
+			String text = readTextFromURL(helpURL);
 			helpText.setText(text);
 		}
 		catch (IOException ex)
 		{
-			JOptionPane.showMessageDialog(null, "HIBA! Fájl nem található: "+helpHTML);
+			JOptionPane.showMessageDialog(null, "HIBA! Nem érhetõ el a súgó: "+helpURL);
 			helpText.setText("<h1>Nem érhetõ el leírás</h1>");
 			ex.printStackTrace();
 		}
@@ -52,21 +53,22 @@ public class HelpWindow extends JFrame implements HyperlinkListener
 		setVisible(true);
 	}
 	
-	/** Read everything from the given text file
+	/** Read everything from the given text URL
 	 *	@param String fileName - name of the text file
 	 *	@return String Content of fileName
 	 *  @throws IOException 
 	 **/
-	private String readTextFromFile(String fileName) throws IOException
+	private String readTextFromURL(String fileName) throws IOException
 	{
 		String result = "";
-		BufferedReader reader = new BufferedReader(new FileReader(fileName));
+		URL url = new URL(fileName);
+		Scanner reader = new Scanner(url.openStream());
 		
-		String line = reader.readLine();
-		while(line!=null)
+		String line = "";
+		while (reader.hasNextLine())
 		{
 			result+=line;
-			line = reader.readLine();
+			line = reader.nextLine();
 		}
 		reader.close();
 		return result;

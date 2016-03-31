@@ -11,9 +11,9 @@ import java.awt.event.ComponentEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
-import java.io.File;
 
 import java.io.IOException;
+import java.net.URL;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -33,7 +33,7 @@ public class GameWindow extends JFrame implements ActionListener, MouseListener
 	private JButton[] buttons = new JButton[GameSettings.answersCount];
 	private Question quest;
 	private Thread musicThread;
-	private String altFile = "disc.jpg";
+	private String altFile = "http://progmatinfo.netii.net/disc.jpg";
 	private BufferedImage coverImage = null;
 	private JLabel picLabel = new JLabel();
 	
@@ -89,7 +89,6 @@ public class GameWindow extends JFrame implements ActionListener, MouseListener
 		renderElements(getWidth(), getHeight());
 		musicThread.start();
 	}
-	
 	
 	/** Create and set the Game Window. Used in constructors.
 	 *  @param int width - Window width 
@@ -147,7 +146,7 @@ public class GameWindow extends JFrame implements ActionListener, MouseListener
 		}
 		
 		questionLabel.setBounds(width/3, height/2-50, 2*width/3, 50);
-		questionLabel.setFont(new Font("Serif", Font.PLAIN, 28));
+		questionLabel.setFont(new Font("Serif", Font.PLAIN, 20));
 		cont.add(questionLabel);
 		
 		picLabel.setBounds(width/2-height/8, height/5, height/4, height/4);
@@ -194,7 +193,8 @@ public class GameWindow extends JFrame implements ActionListener, MouseListener
 		{
 			try 
 			{
-				coverImage = ImageIO.read(new File(altFile));
+				URL url = new URL(altFile);
+				coverImage = ImageIO.read(url.openStream());
 			} 
 			catch (IOException e) 
 			{
@@ -273,13 +273,16 @@ public class GameWindow extends JFrame implements ActionListener, MouseListener
 			ex.printStackTrace();
 		}
 	}
-
+	/** TODO: need to do something with multiple click error stuff
+	 *  TODO: the program sometimes just freeze without any exception 
+	 **/
+	
 	@Override
 	public void mouseClicked(MouseEvent e) 
 	{
 	    if (e.getClickCount() < 2) 
 	    {
-	        System.out.println("double click");
+	       // System.out.println("double click");
 	        multiClicked = false;
 	    } 
 	    else 
