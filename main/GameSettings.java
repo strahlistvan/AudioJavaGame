@@ -9,6 +9,7 @@ public class GameSettings
 {
 	public static ArrayList<Music> audioFiles = new ArrayList<Music>();
 	public static ArrayList<String> artists = new ArrayList<String>();
+	public static ArrayList<String> albums = new ArrayList<String>();
 	public static String folderName = new File(".").toString();
 	public static Integer answersCount = 4;
 	public static Integer starterLifeCount = 3;
