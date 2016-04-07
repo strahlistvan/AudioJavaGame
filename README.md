@@ -2,8 +2,10 @@
 It's a simple Music quiz about your own mp3 music files. 
 
 Eclipse Java SE project. Plain Java Classes with Java Swing GUI and external Java libraries: 
-<a href="http://www.jthink.net/jaudiotagger/" target="_blank"> JAudioTagger </a> -to extract audio files metadata
-<a href="http://www.javazoom.net/javalayer/javalayer.html" target="_blank"> JLayer </a> - to play mp3 music files
+<ul>
+<li> <a href="http://www.jthink.net/jaudiotagger/" target="_blank"> JAudioTagger </a> -to extract audio files metadata
+<li> <a href="http://www.javazoom.net/javalayer/javalayer.html" target="_blank"> JLayer </a> - to play mp3 music files
+</ul>
 
 <strong> audio package: </strong> <br />
 
