@@ -8,8 +8,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
 
 import java.io.IOException;
@@ -23,7 +21,7 @@ import main.GameSettings;
 import main.Question;
 
 @SuppressWarnings("serial")
-public class GameWindow extends JFrame implements ActionListener, MouseListener
+public class GameWindow extends JFrame implements ActionListener
 {
 	private static GameWindow instance;
 	
@@ -37,7 +35,7 @@ public class GameWindow extends JFrame implements ActionListener, MouseListener
 	private BufferedImage coverImage = null;
 	private JLabel picLabel = new JLabel();
 	
-	private boolean multiClicked = false;
+	private boolean buttonAlreadyClicked = false;
 	
 	public GameWindow() 
 	{
@@ -107,7 +105,7 @@ public class GameWindow extends JFrame implements ActionListener, MouseListener
 		{
 			buttons[i] = new JButton();
 			buttons[i].addActionListener(this);
-			buttons[i].addMouseListener(this);
+			//buttons[i].addMouseListener(this);
 		}
 		renderElements(width, height);
 		
@@ -151,6 +149,7 @@ public class GameWindow extends JFrame implements ActionListener, MouseListener
 		
 		picLabel.setBounds(width/2-height/8, height/5, height/4, height/4);
 		cont.add(picLabel);	
+		buttonAlreadyClicked = false;
 	}
 		
    /** Resize an image using a Graphics2D object backed by a BufferedImage.
@@ -211,8 +210,9 @@ public class GameWindow extends JFrame implements ActionListener, MouseListener
 	@Override
 	public void actionPerformed(ActionEvent event) 
 	{
-		if (multiClicked)
+		if (buttonAlreadyClicked)
 			return;
+		 buttonAlreadyClicked = true;
 		
 		try 
 		{
@@ -273,53 +273,10 @@ public class GameWindow extends JFrame implements ActionListener, MouseListener
 			ex.printStackTrace();
 		}
 	}
+	
 	/** TODO: need to do something with multiple click error stuff
 	 *  TODO: the program sometimes just freeze without any exception 
+	 *  (probably solved)
 	 **/
 	
-	@Override
-	public void mouseClicked(MouseEvent e) 
-	{
-	    if (e.getClickCount() < 2) 
-	    {
-	       // System.out.println("double click");
-	        multiClicked = false;
-	    } 
-	    else 
-	    {
-	        multiClicked = true;
-	        try 
-	        {
-				Thread.sleep(500);
-			} catch (InterruptedException e1) 
-	        {
-				e1.printStackTrace();
-			}
-	    }
-		
-	}
-
-	@Override
-	public void mouseEntered(MouseEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void mouseExited(MouseEvent e) {
-		// TODO Auto-generated method stub
-		multiClicked = false;
-	}
-
-	@Override
-	public void mousePressed(MouseEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void mouseReleased(MouseEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
 }
