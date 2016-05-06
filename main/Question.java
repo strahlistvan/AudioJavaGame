@@ -8,11 +8,12 @@ import audio.Music;
 
 public class Question 
 {
-	/* Codes for the question type property */
+	/* Constants for the question type property */
 	public final int TITLE  = 0;
 	public final int ARTIST = 1;
 	public final int ALBUM  = 2;
 	public final int YEAR   = 3;
+	
 	public final int MODE_COUNT = 4;
 
 	//maximal limit of cycles at random selection
@@ -42,7 +43,11 @@ public class Question
 		else if (type==ARTIST)
 		{	
 			if (GameSettings.artists.size() >= 4)
-				makeArtistQuestion();
+			{
+				boolean success = makeArtistQuestion();
+				if (!success)
+					makeTitleQuestion();
+			}
 			else 
 				makeTitleQuestion();	
 		}
@@ -50,13 +55,19 @@ public class Question
 		{
 			System.out.println("Album! SIZE:"+GameSettings.albums.size());
 			if (GameSettings.albums.size() >= 4)
-				makeAlbumQuestion();
+			{
+				boolean success = makeAlbumQuestion();
+				if (!success)
+					makeTitleQuestion();
+			}
 			else
 				makeTitleQuestion();
 		}
 		else if (type==YEAR)
 		{
-			makeYearQuestion();
+			boolean success = makeYearQuestion();
+			if (!success)
+				makeTitleQuestion();
 		}
 		else 
 			System.out.println("Type: "+type+" Not found.");
@@ -70,21 +81,14 @@ public class Question
 	private void makeTitleQuestion()
 	{
 		int musicCount = GameSettings.audioFiles.size();
-		int cycles = 0;
 		
 		questionLine = "Mi a jelenleg szóló zene címe?";
 		answers = new ArrayList<String>();
 		
-		goodAnswer = "";
-		
-		while (goodAnswer.matches("\\s*") && cycles < MAX_CYCLES)
-		{
-			goodAnswer = currentMusic.getTitle();
-			++cycles;
-		}
+		goodAnswer = currentMusic.getTitle();
 		answers.add(goodAnswer);
 		
-		cycles = 0;
+		int cycles = 0;
 		while (answers.size()!=GameSettings.answersCount && cycles < MAX_CYCLES)
 		{
 			//read bad answers from the all music
@@ -108,26 +112,22 @@ public class Question
 	}
 	
 	
-	/** Make a "Who is the artist of the song?" type question.
-	 *  If the user don't have enough artist, then "What is the title?" question 
-	 **/
-	private void makeArtistQuestion()
+	/** Make a "Who is the artist of the song?" type question. **/
+	private boolean makeArtistQuestion()
 	{
 		questionLine = "Ki az elõadója a hallott zeneszámnak?";
 		answers = new ArrayList<String>();
-		int cycles = 0;
+	
+		goodAnswer = currentMusic.getArtist();
 		
-		goodAnswer = "";
-		while (goodAnswer.matches("\\s*") && cycles < MAX_CYCLES)
-		{
-			goodAnswer = currentMusic.getArtist();
-			++cycles;
-		}
+		if (goodAnswer.matches("\\s*"))
+			return false;
+		
 		answers.add(goodAnswer);
 		
 		int artistCount = GameSettings.artists.size();
 			
-		cycles = 0;
+		int cycles = 0;
 		while (answers.size()!=GameSettings.answersCount && cycles < MAX_CYCLES)
 		{
 			//read bad answers from the all music
@@ -147,29 +147,25 @@ public class Question
 			answers.add(GameSettings.artists.get(2));
 			answers.add(GameSettings.artists.get(3));
 		}
+		
+		return true;
 	}
 	
-	/** Make a "This song is in whitch album?" type question.
-	 *  If the user don't have enough artist, then "What is the title?" question 
-	 **/
-	private void makeAlbumQuestion()
+	/** Make a "This song is in which album?" type question.  **/
+	private boolean makeAlbumQuestion()
 	{
 		questionLine = "Melyik albumon hallható ez a zeneszám?";
 		answers = new ArrayList<String>();
-		int cycles = 0;
 		
-		goodAnswer = "";
+		goodAnswer = currentMusic.getAlbum();
+		if (goodAnswer.matches("\\s*"))
+			return false; 
 		
-		while (goodAnswer.matches("\\s*") && cycles < MAX_CYCLES)
-		{
-			goodAnswer = currentMusic.getAlbum();
-			++cycles;
-		}
 		answers.add(goodAnswer);
 		
 		int albumCount = GameSettings.albums.size();
 			
-		cycles = 0;
+		int cycles = 0;
 		while (answers.size()!=GameSettings.answersCount && cycles < MAX_CYCLES)
 		{
 			//read bad answers from the all music
@@ -190,21 +186,23 @@ public class Question
 			answers.add(GameSettings.albums.get(3));
 		}
 
+		return true;
 	}
-	
-	private void makeYearQuestion()
+		
+	/** Make a "When the song released?" type random question.
+	 *  If it not successful, return false.
+	 *  @return boolean success
+	 **/
+	private boolean makeYearQuestion()
 	{
 		questionLine = "Mikor jelent meg a hallott zeneszám?";
 		answers = new ArrayList<String>();
-		int cycles = 0;
 		
-		goodAnswer = "";
-		Integer goodAnswerInt = 0;
-		while (goodAnswer.matches("\\s*") && cycles < MAX_CYCLES)
-		{
-			goodAnswerInt = currentMusic.getYear();
-			goodAnswer = currentMusic.getYear().toString();
-		}
+		Integer goodAnswerInt = currentMusic.getYear();
+		goodAnswer = currentMusic.getYear().toString();
+        
+		if (goodAnswerInt == 0)
+			return false;
 		
 		answers.add(goodAnswer);
 		int currentYear =  Calendar.getInstance().get(Calendar.YEAR);
@@ -218,6 +216,8 @@ public class Question
 			answer = (answer > currentYear)?1984+randNum:answer; 
 			answers.add(answer.toString());
 		}
+		
+		return true;
 	}
 	
 	public int getType() {
