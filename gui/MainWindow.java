@@ -146,7 +146,7 @@ public class MainWindow extends JFrame implements ActionListener
 		} 
 		else if (event.getActionCommand().equals("read music")) 
 		{
-			pleaseWaitLabel.setText(GameSettings.folderName+" olvasása folyamatban...");
+			pleaseWaitLabel.setText(GameSettings.folderName+" könyvtár olvasása folyamatban...");
 			pleaseWaitLabel.setVisible(true);
 			playGameButton.setEnabled(false);
 			chooseFileButton.setEnabled(false);
