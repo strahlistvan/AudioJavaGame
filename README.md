@@ -32,6 +32,6 @@ Eclipse Java SE project. Plain Java Classes with Java Swing GUI and external Jav
 <li> <strong> InfoPanel </strong>  - Information panel about the score and the lifes. (Used in <b> MainWindow </b> and <b> GameWindow </b>) <br />
 </ul>
 
-To directly download the executable Jar file: http://audiojavagame.pe.hu/AudioJavaGame_v0.1_beta.jar
+To directly download the executable Jar file: http://audiojavagame.pe.hu/AudioJavaGame_v0.2_beta.jar
 
 For more information, visit http://audiojavagame.pe.hu/ (Hungarian language)
